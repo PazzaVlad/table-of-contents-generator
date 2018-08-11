@@ -1,0 +1,17 @@
+{
+  "name": "table-of-contents-generator",
+  "version": "0.1.2",
+  "description": "Node.js server side Table of Content generator. Produce valid HTML5 code.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "table of content",
+    "toc",
+    "title",
+    "h2"
+  ],
+  "author": "Vlad Harb",
+  "license": "MIT"
+}

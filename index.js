@@ -3,9 +3,23 @@
 /**
  * Ref: https://stackoverflow.com/a/32867186
  * 
- * @param {string} html - html for TOC.
+ * @param {string} content - Content for TOC.
+ * 
+ * @param {object?} config - Config object.
+ * @param {string?} config.bbCode - BBCode, that will be replaced by TOC. If not specified – TOC will be added at the beginning of content.
+ * @param {string?} config.containerClass - HTML class for TOC container.
+ * @param {string?} config.titleClass - HTML class for TOC title.
+ * @param {string?} config.title - TOC title.
+ * 
  */
-module.exports = function tableOfContentsGenerator(html) {
+module.exports = function tableOfContentsGenerator(content, { bbCode, containerClass = 'toc', titleClass = 'toc-title', title = 'Table of Content' } = {}) {
+  /**
+   * If we specify BBCode but it wasn't find in text – just return content earlier.
+   */
+  if (bbCode && content.indexOf(bbCode) === -1) {
+    return content
+  }
+
   /**
    * State
    */
@@ -17,8 +31,8 @@ module.exports = function tableOfContentsGenerator(html) {
   // Works only for plain H tags without classes, ids etc.
   const regexp = /<h([\d])>([^<]+)<\/h([\d])>/gi
   
-  html = 
-    html.replace(regexp, (str, openLevel, titleText, closeLevel) => {
+  content = 
+    content.replace(regexp, (str, openLevel, titleText, closeLevel) => {
       if (openLevel != closeLevel) {
           return str
       }
@@ -43,7 +57,19 @@ module.exports = function tableOfContentsGenerator(html) {
     toc += (new Array(level + 1)).join('</ul>')
   }
 
-  output += toc
+  output += toc;
   
-  return output 
+  /**
+   * If we find headers - paste TOC to the content.
+   */
+  if (output) {
+    const wrappedToc = `<div class="${containerClass}"><div class="${titleClass}">${title}</div>${output}</div>`
+
+    /**
+     * If we specify BBCode, replace it with TOC. If not – add TOC to beginning of content.
+     */
+    content = bbCode ? content.replace(bbCode, wrappedToc) : wrappedToc + content
+  }
+  
+  return content 
 }

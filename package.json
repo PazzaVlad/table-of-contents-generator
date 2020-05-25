@@ -17,5 +17,9 @@
     "h2"
   ],
   "author": "Vlad Harb",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "slugify": "^1.4.0"
+  }
 }
